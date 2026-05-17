@@ -16,6 +16,12 @@
       "processor_type": "ars_zero:random_block_subset",
       "target_block": "ars_zero:bone_chest",
       "count_weights": [0, 35, 35, 15, 8, 4, 2, 1, 1]
+    },
+    {
+      "processor_type": "ars_zero:necropolis_content"
+    },
+    {
+      "processor_type": "ars_zero:worldgen_sanitizer"
     }
   ]
 }

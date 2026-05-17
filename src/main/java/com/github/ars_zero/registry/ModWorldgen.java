@@ -7,16 +7,19 @@ import com.github.ars_zero.common.world.structure.BlightDungeonStructure;
 import com.github.ars_zero.common.world.structure.BlightVeinProcessor;
 import com.github.ars_zero.common.world.structure.CobwebProcessor;
 import com.github.ars_zero.common.world.structure.NecropolisConnectorPiece;
+import com.github.ars_zero.common.world.structure.NecropolisContentProcessor;
 import com.github.ars_zero.common.world.structure.NecropolisEntrancePiece;
 import com.github.ars_zero.common.world.structure.NecropolisStaircasePiece;
 import com.github.ars_zero.common.world.structure.RandomBlockSubsetProcessor;
 import com.github.ars_zero.common.world.structure.StripWaterloggedProcessor;
+import com.github.ars_zero.common.world.structure.WorldgenSanitizerProcessor;
 import com.github.ars_zero.common.world.placement.NoBlightLogNearbyFilter;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import com.github.ars_zero.common.world.tree.BigDeadArchwoodTrunkPlacer;
 import com.github.ars_zero.common.world.tree.DeadArchwoodTrunkPlacer;
 import com.github.ars_zero.common.world.tree.FlatBlobFoliagePlacer;
 import com.github.ars_zero.common.world.tree.HugeDeadArchwoodTrunkPlacer;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
@@ -28,8 +31,8 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+import com.github.ars_zero.compat.neoforge.registries.DeferredHolder;
+import com.github.ars_zero.compat.neoforge.registries.DeferredRegister;
 
 /**
  * Worldgen registries: trunk placer type, features, configured/placed features, and biome for blight forest.
@@ -40,22 +43,28 @@ public final class ModWorldgen {
         DeferredRegister.create(BuiltInRegistries.STRUCTURE_TYPE, ArsZero.MOD_ID);
 
     public static final DeferredHolder<StructureType<?>, StructureType<BlightDungeonStructure>> NECROPOLIS_STRUCTURE =
-        STRUCTURE_TYPES.register("necropolis", () -> () -> BlightDungeonStructure.CODEC);
+        STRUCTURE_TYPES.register("necropolis", () -> () -> BlightDungeonStructure.CODEC.codec());
 
     public static final DeferredRegister<StructureProcessorType<?>> STRUCTURE_PROCESSOR_TYPES =
         DeferredRegister.create(BuiltInRegistries.STRUCTURE_PROCESSOR, ArsZero.MOD_ID);
 
     public static final DeferredHolder<StructureProcessorType<?>, StructureProcessorType<CobwebProcessor>> COBWEB_PROCESSOR =
-        STRUCTURE_PROCESSOR_TYPES.register("cobweb", () -> () -> CobwebProcessor.CODEC);
+        STRUCTURE_PROCESSOR_TYPES.register("cobweb", () -> () -> CobwebProcessor.CODEC.codec());
 
     public static final DeferredHolder<StructureProcessorType<?>, StructureProcessorType<StripWaterloggedProcessor>> STRIP_WATERLOGGED_PROCESSOR =
-        STRUCTURE_PROCESSOR_TYPES.register("strip_waterlogged", () -> () -> StripWaterloggedProcessor.CODEC);
+        STRUCTURE_PROCESSOR_TYPES.register("strip_waterlogged", () -> () -> StripWaterloggedProcessor.CODEC.codec());
 
     public static final DeferredHolder<StructureProcessorType<?>, StructureProcessorType<RandomBlockSubsetProcessor>> RANDOM_BLOCK_SUBSET_PROCESSOR =
-        STRUCTURE_PROCESSOR_TYPES.register("random_block_subset", () -> () -> RandomBlockSubsetProcessor.CODEC);
+        STRUCTURE_PROCESSOR_TYPES.register("random_block_subset", () -> () -> RandomBlockSubsetProcessor.CODEC.codec());
 
     public static final DeferredHolder<StructureProcessorType<?>, StructureProcessorType<BlightVeinProcessor>> BLIGHT_VEIN_PROCESSOR =
-        STRUCTURE_PROCESSOR_TYPES.register("blight_vein", () -> () -> BlightVeinProcessor.CODEC);
+        STRUCTURE_PROCESSOR_TYPES.register("blight_vein", () -> () -> BlightVeinProcessor.CODEC.codec());
+
+    public static final DeferredHolder<StructureProcessorType<?>, StructureProcessorType<NecropolisContentProcessor>> NECROPOLIS_CONTENT_PROCESSOR =
+        STRUCTURE_PROCESSOR_TYPES.register("necropolis_content", () -> () -> NecropolisContentProcessor.CODEC.codec());
+
+    public static final DeferredHolder<StructureProcessorType<?>, StructureProcessorType<WorldgenSanitizerProcessor>> WORLDGEN_SANITIZER_PROCESSOR =
+        STRUCTURE_PROCESSOR_TYPES.register("worldgen_sanitizer", () -> () -> WorldgenSanitizerProcessor.CODEC.codec());
 
     public static final DeferredRegister<StructurePieceType> STRUCTURE_PIECE_TYPES =
         DeferredRegister.create(BuiltInRegistries.STRUCTURE_PIECE, ArsZero.MOD_ID);
@@ -86,22 +95,22 @@ public final class ModWorldgen {
 
     public static final DeferredHolder<TrunkPlacerType<?>, TrunkPlacerType<DeadArchwoodTrunkPlacer>> DEAD_ARCHWOOD_TRUNK_PLACER =
         TRUNK_PLACER_TYPES.register("dead_archwood_trunk_placer",
-            () -> new TrunkPlacerType<>(DeadArchwoodTrunkPlacer.CODEC));
+            () -> new TrunkPlacerType<>(DeadArchwoodTrunkPlacer.CODEC.codec()));
 
     public static final DeferredHolder<TrunkPlacerType<?>, TrunkPlacerType<BigDeadArchwoodTrunkPlacer>> BIG_DEAD_ARCHWOOD_TRUNK_PLACER =
         TRUNK_PLACER_TYPES.register("big_dead_archwood_trunk_placer",
-            () -> new TrunkPlacerType<>(BigDeadArchwoodTrunkPlacer.CODEC));
+            () -> new TrunkPlacerType<>(BigDeadArchwoodTrunkPlacer.CODEC.codec()));
 
     public static final DeferredHolder<TrunkPlacerType<?>, TrunkPlacerType<HugeDeadArchwoodTrunkPlacer>> HUGE_DEAD_ARCHWOOD_TRUNK_PLACER =
         TRUNK_PLACER_TYPES.register("huge_dead_archwood_trunk_placer",
-            () -> new TrunkPlacerType<>(HugeDeadArchwoodTrunkPlacer.CODEC));
+            () -> new TrunkPlacerType<>(HugeDeadArchwoodTrunkPlacer.CODEC.codec()));
 
     public static final DeferredRegister<FoliagePlacerType<?>> FOLIAGE_PLACER_TYPES =
         DeferredRegister.create(BuiltInRegistries.FOLIAGE_PLACER_TYPE, ArsZero.MOD_ID);
 
     public static final DeferredHolder<FoliagePlacerType<?>, FoliagePlacerType<FlatBlobFoliagePlacer>> FLAT_BLOB_FOLIAGE_PLACER =
         FOLIAGE_PLACER_TYPES.register("flat_blob_foliage_placer",
-            () -> new FoliagePlacerType<>(FlatBlobFoliagePlacer.CODEC));
+            () -> new FoliagePlacerType<>(FlatBlobFoliagePlacer.CODEC.codec()));
 
     public static final DeferredRegister<PlacementModifierType<?>> PLACEMENT_MODIFIER_TYPES =
         DeferredRegister.create(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, ArsZero.MOD_ID);
@@ -110,8 +119,8 @@ public final class ModWorldgen {
         PLACEMENT_MODIFIER_TYPES.register("no_blight_log_nearby",
             () -> new PlacementModifierType<NoBlightLogNearbyFilter>() {
                 @Override
-                public com.mojang.serialization.MapCodec<NoBlightLogNearbyFilter> codec() {
-                    return NoBlightLogNearbyFilter.CODEC;
+                public Codec<NoBlightLogNearbyFilter> codec() {
+                    return NoBlightLogNearbyFilter.CODEC.codec();
                 }
             });
 

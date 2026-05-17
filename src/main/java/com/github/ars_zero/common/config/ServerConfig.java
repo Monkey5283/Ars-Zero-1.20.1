@@ -1,20 +1,20 @@
 package com.github.ars_zero.common.config;
 
-import net.neoforged.neoforge.common.ModConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec;
 
 public class ServerConfig {
 
-    public static ModConfigSpec SERVER_CONFIG;
-    public static ModConfigSpec.BooleanValue ALLOW_NON_OP_ANCHOR_ON_PLAYERS;
-    public static ModConfigSpec.IntValue LARGE_EXPLOSION_MAX_BLOCKS_PER_TICK;
-    public static ModConfigSpec.IntValue DEFAULT_MULTIPHASE_DEVICE_TICK_DELAY;
-    /** Weight for blight forest biome when using Terrablender. ~25% of archwood forest when set to 1 and archwood weight is 3. */
-    public static ModConfigSpec.IntValue BLIGHT_FOREST_WEIGHT;
+    public static ForgeConfigSpec SERVER_CONFIG;
+    public static ForgeConfigSpec.BooleanValue ALLOW_NON_OP_ANCHOR_ON_PLAYERS;
+    public static ForgeConfigSpec.IntValue LARGE_EXPLOSION_MAX_BLOCKS_PER_TICK;
+    public static ForgeConfigSpec.IntValue DEFAULT_MULTIPHASE_DEVICE_TICK_DELAY;
+    /** TerraBlender region weight for Blight Forest land-biome replacement. */
+    public static ForgeConfigSpec.IntValue BLIGHT_FOREST_WEIGHT;
     /** Spell power bonus granted per filial item (held offhand or embedded in staff). */
-    public static ModConfigSpec.IntValue FILIAL_POWER_BONUS;
+    public static ForgeConfigSpec.IntValue FILIAL_POWER_BONUS;
 
     static {
-        ModConfigSpec.Builder SERVER_BUILDER = new ModConfigSpec.Builder();
+        ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
 
         SERVER_BUILDER.comment("Anchor Effect Settings").push("anchor_effect");
         ALLOW_NON_OP_ANCHOR_ON_PLAYERS = SERVER_BUILDER.comment(
@@ -35,10 +35,11 @@ public class ServerConfig {
                 .defineInRange("defaultTickDelay", 10, 1, 20);
         SERVER_BUILDER.pop();
 
-        SERVER_BUILDER.comment("Blight forest biome (Terrablender). Set to 0 to disable.").push("blight_forest");
+        SERVER_BUILDER.comment("Blight forest TerraBlender land replacement settings.").push("blight_forest");
         BLIGHT_FOREST_WEIGHT = SERVER_BUILDER.comment(
-                "Region weight for blight forest. Use 1 for ~25%% when Ars Nouveau archwood forest weight is 3.")
-                .defineInRange("weight", 1, 0, Integer.MAX_VALUE);
+                "TerraBlender region weight for replacing vanilla forest and taiga land biome slots with blight forest.",
+                "Use 0 to disable. Values above 1 are clamped at runtime to avoid unstable terrain in heavily modded worldgen.")
+                .defineInRange("weight", 1, 0, 1);
         SERVER_BUILDER.pop();
 
         SERVER_BUILDER.comment("Filial item settings").push("filial");
